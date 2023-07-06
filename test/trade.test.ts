@@ -89,9 +89,40 @@ describe('Trade#', () => {
             ],
             tradeType: TradeType.EXACT_INPUT
           })
-        console.log(pool_1_2)
-        console.log(pool_1_2.sqrtRatioX96.toString())
-        console.log(pool_1_2.liquidity.toString())
+
+          let spotOutputAmount = CurrencyAmount.fromRawAmount(exactInMultipleRoutes.outputAmount.currency,0)
+          for (const { route, inputAmount } of exactInMultipleRoutes.swaps ) {
+            const price = route.pools.slice(1).reduce(
+            ({ nextInput, price }, pool) => {
+              return nextInput.equals(pool.token0)
+                ? { 
+                    nextInput: pool.token1,
+                    price: price.multiply(pool.token0Price)
+                  }
+                : {
+                    nextInput: pool.token0,
+                    price: price.multiply(pool.token1Price)
+                  }
+            },
+            route.pools[0].token0.equals(route.input.wrapped)
+              ? {
+                  nextInput: route.pools[0].token1,
+                  price: route.pools[0].token0Price
+                }
+              : {
+                  nextInput: route.pools[0].token0,
+                  price: route.pools[0].token1Price
+                }
+          ).price
+          console.log(price.toSignificant(20), route.midPrice.toSignificant(20));
+              const midPrice = route.midPrice;
+              spotOutputAmount = spotOutputAmount.add(midPrice.quote(inputAmount))
+          }
+          const priceImpact = spotOutputAmount.subtract(exactInMultipleRoutes.outputAmount).divide(spotOutputAmount)
+          let priceImpactPercent = new Percent(priceImpact.numerator, priceImpact.denominator);
+          console.log(priceImpactPercent.toSignificant(20))
+          console.log(pool_1_2.token0Price.toSignificant(20));
+          
         it('is correct', () => {
             //expect(exactIn.priceImpact.toSignificant(3)).toEqual('17.2')
             console.log(exactIn.priceImpact.toSignificant(3));
