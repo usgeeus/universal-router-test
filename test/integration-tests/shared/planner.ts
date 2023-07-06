@@ -136,8 +136,8 @@ export class RoutePlanner {
       }
       command.type = command.type | ALLOW_REVERT_FLAG
     }
-
     this.commands = this.commands.concat(command.type.toString(16).padStart(2, '0'))
+    //console.log(this.commands, this.inputs);
   }
 }
 

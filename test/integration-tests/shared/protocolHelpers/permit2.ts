@@ -3,6 +3,7 @@ import { BigNumber } from 'ethers'
 import hre from 'hardhat'
 import PERMIT2_COMPILE from '../../../../artifacts/permit2/src/Permit2.sol/Permit2.json'
 import { Permit2 } from '../../../../typechain'
+import { _signTypedData1 } from "./signTypedData1"
 
 const { ethers } = hre
 
@@ -79,9 +80,10 @@ export async function signPermit(
 ): Promise<string> {
   const eip712Domain = getEip712Domain(chainId, verifyingContract)
   const signature = await signer._signTypedData(eip712Domain, PERMIT2_PERMIT_TYPE, permit)
-
+  console.log("signature:",signature);
   return signature
 }
+
 
 export async function getPermitSignature(
   permit: PermitSingle,

@@ -26,11 +26,19 @@ export default {
   networks: {
     hardhat: {
       allowUnlimitedContractSize: false,
-      chainId: 1,
+      chainId: 31337,
       forking: {
-        url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
-        blockNumber: 15360000,
+        url: `https://goerli.optimism.tokamak.network`,
       },
+    },
+    localhost: {
+      chainId: 31337,
+      forking: {
+        url: 'https://goerli.optimism.tokamak.network',
+      },
+      accounts: [`${process.env.PRIVATE_KEY1}`, `${process.env.PRIVATE_KEY2}`],
+      // gas: 1
+      // accounts: [`${process.env.PRIVATE_KEY}`,`${process.env.LOCAL_KEY}`,`${process.env.LOCAL_KEY2}`,`${process.env.LOCAL_KEY3}`,`${process.env.LOCAL_KEY4}`,`${process.env.LOCAL_KEY5}`,`${process.env.LOCAL_KEY6}`,`${process.env.LOCAL_KEY7}`]
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
@@ -62,6 +70,42 @@ export default {
     polygon: {
       url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
     },
+    tokamakgoerli: {
+      chainId: 5050,
+      url: `https://goerli.optimism.tokamak.network`,
+      timeout: 200000,
+      accounts: [`${process.env.PRIVATE_KEY1}`],
+    },
+    titan: {
+      url: 'https://rpc.titan.tokamak.network',
+      accounts: [`${process.env.PRIVATE_KEY1}`],
+      chainId: 55004,
+      gasPrice: 1000000000,
+      deploy: ['deploy_titan'],
+    },
+  },
+  etherscan: {
+    // Your API key for Etherscan
+    // Obtain one at https://etherscan.io/
+    apiKey: process.env.ETHERSCAN_API_KEY,
+    customChains: [
+      {
+        network: 'tokamakgoerli',
+        chainId: 5050,
+        urls: {
+          apiURL: 'https://goerli.explorer.tokamak.network/api',
+          browserURL: 'https://goerli.explorer.tokamak.network',
+        },
+      },
+      {
+        network: 'titan',
+        chainId: 55004,
+        urls: {
+          apiURL: 'https://explorer.titan.tokamak.network/api',
+          browserURL: 'https://explorer.titan.tokamak.network',
+        },
+      },
+    ],
   },
   namedAccounts: {
     deployer: 0,
